@@ -25,6 +25,7 @@ import com.mirego.rebelchat.controllers.MessageController;
 import com.mirego.rebelchat.controllers.MessageControllerImpl;
 import com.mirego.rebelchat.controllers.UsersController;
 import com.mirego.rebelchat.controllers.UsersControllerImpl;
+import com.mirego.rebelchat.controllers.UsersSingleton;
 import com.mirego.rebelchat.models.User;
 
 
@@ -130,7 +131,12 @@ public class ContactPickerFragment extends Fragment implements OnItemClickListen
 
 
 	public void refreshList() {
-		usersController.getUsers(getActivity(), "", this);
+		if(UsersSingleton.getInstance().getUsers().size() == 0) {
+			usersController.getUsers(getActivity(), "", this);
+		} else {
+			adapter = new ContactPickerAdapter(getActivity(), UsersSingleton.getInstance().getUsers());
+			listView.setAdapter(adapter);
+		}
 	}
 
 	@Override

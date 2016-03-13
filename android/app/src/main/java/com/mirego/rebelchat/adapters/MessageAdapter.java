@@ -10,6 +10,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mirego.rebelchat.R;
+import com.mirego.rebelchat.controllers.UsersSingleton;
 import com.mirego.rebelchat.models.Message;
 import com.mirego.rebelchat.models.User;
 
@@ -64,12 +65,11 @@ public class MessageAdapter extends ArrayAdapter<Message> {
 
         Message r = getItem(position);
 
-        holder.user.setText(r.userId);
+        holder.user.setText(UsersSingleton.getInstance().getUsernameWithId(r.userId));
         holder.message.setText(r.text);
 
 
         if(r.image != null) {
-            //Picasso.with(getContext()).load(r.avatar).transform(new CircleTransform()).into(holder.avatar);
             holder.image.setImageBitmap(r.image);
         }
 

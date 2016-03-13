@@ -45,4 +45,15 @@ public class UsersSingleton implements UsersController.UsersCallback {
     public void onUsersFailed() {
 
     }
+
+    public String getUsernameWithId(String userId) {
+        final String username = "Unknown";
+
+        for(User user : users) {
+            if(user.userId != null && user.userId.equals(userId)) {
+                return user.username;
+            }
+        }
+        return username;
+    }
 }
