@@ -66,7 +66,7 @@ public class SnapButton extends Button {
         // Check the timer state (forward or backwards animation)
         boolean shouldRepeat = true;
         long duration = 0;
-        if (stopTime != null) {
+        if (stopTime != null && lastValue != null) {
             duration = (long) (lastValue - (System.currentTimeMillis() - stopTime) * (lastValue / ((float) ANIMATION_DURATION / 10)));
             if (duration <= 0) {
                 shouldRepeat = false;
