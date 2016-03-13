@@ -147,7 +147,7 @@ public class ContactPickerFragment extends Fragment implements OnItemClickListen
 						@Override
 						public void onSendMessageSuccess() {
 							if(getActivity() != null) {
-								Toast.makeText(getActivity(), R.string.message_send_success, Toast.LENGTH_SHORT).show();
+								//Toast.makeText(getActivity(), R.string.message_send_success, Toast.LENGTH_SHORT).show();
 							}
 						}
 

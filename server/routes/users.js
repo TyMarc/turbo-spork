@@ -49,7 +49,7 @@ router.get('/:id/messages', function(req, res) {
       res.send('Not found');
     } else {
       // SUCCESS
-        db.messages.find({ userId: _userId}, {}, function(e, docs) {
+        db.messages.find({ userIdTo: _userId}, {}, function(e, docs) {
           res.json(docs);
         });
     }
