@@ -23,6 +23,7 @@ import android.view.Gravity;
 import android.view.View;
 import android.view.animation.AccelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -64,6 +65,15 @@ public class MessageActivity extends BaseActivity {
 
     @Bind(R.id.message_text)
     TextView messageText;
+
+    @Bind(R.id.font_reduce)
+    Button fontReduce;
+
+    @Bind(R.id.font_grow)
+    Button fontGrow;
+
+    @Bind(R.id.color_pick)
+    Button colorPick;
 
     public static Intent newIntent(Activity fromActivity, String userId) {
         Intent intent = new Intent(fromActivity, MessageActivity.class);
@@ -209,6 +219,20 @@ public class MessageActivity extends BaseActivity {
     @OnClick(R.id.btn_snap)
     void onSnapPressed() {
         takeAndSendScreenshot();
+    }
+
+    @OnClick(R.id.font_grow)
+    void onFontGrowed() {
+        this.messageText.setTextSize(this.messageText.getTextSize() + 2);
+    }
+
+    @OnClick(R.id.font_reduce)
+    void onFontReduced() {
+        this.messageText.setTextSize(this.messageText.getTextSize() - 2);
+    }
+
+    @OnClick(R.id.color_pick)
+    void OnColorPicked() {
     }
 
     private void setRandomString() {

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="font_reduce" type="id" />
+    <item name="font_grow" type="id" />
+    <item name="color_pick" type="id" />
+</resources>

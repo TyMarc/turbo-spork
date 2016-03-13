@@ -17,16 +17,44 @@
             android:scaleType="centerCrop"
             android:src="@drawable/sample_bg" />
 
-        <EditText
-            android:id="@+id/message_text"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="@dimen/message_text_height"
             android:layout_gravity="center"
             android:background="@color/messageBackground"
             android:gravity="center"
             android:textColor="@android:color/white"
-            android:textSize="@dimen/message_font_size"
-            tools:text="Hey there" />
+            android:textSize="@dimen/message_font_size" >
+
+            <EditText
+                android:id="@+id/message_text"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/message_text_height"
+                android:background="@color/messageBackground"
+                android:gravity="center"
+                android:textColor="@android:color/white"
+                android:textSize="@dimen/message_font_size"
+                tools:text="Hey there" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@id/font_reduce"
+                android:layout_below="@id/message_text"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/message_text"
+                android:id="@id/font_grow"
+                android:layout_toRightOf="@id/font_reduce"/>
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/message_text"
+                android:id="@id/color_pick"
+                android:layout_toRightOf="@id/font_grow"/>
+
+        </RelativeLayout>
 
     </FrameLayout>
 
@@ -67,7 +95,6 @@
         android:layout_marginEnd="@dimen/message_button_side_margin"
         android:background="?selectableItemBackgroundBorderless"
         android:scaleType="fitCenter"
-        android:tint="@color/white"
         android:src="@drawable/message" />
 
     <com.mirego.rebelchat.views.SnapButton
