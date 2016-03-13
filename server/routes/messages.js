@@ -47,18 +47,18 @@ router.put('/:id', function(req, res) {
   });
 });
 
-/*
- * Create new message
- */
-router.post('/', function(req, res) {
-  var db = req.db;
-  var collection = db.messages;
-  collection.insert(req.body, function(err, result) {
-    res.send(
-      (err === null) ? result : { msg: err }
-    );
+  /*
+   * Create new message
+   */
+  router.post('/', function(req, res) {
+    var db = req.db;
+    var collection = db.messages;
+    collection.insert(req.body, function(err, result) {
+      res.send(
+        (err === null) ? result : { msg: err }
+      );
+    });
   });
-});
 
 /*
  * DELETE message
