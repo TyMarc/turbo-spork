@@ -28,6 +28,7 @@ We didn't really have any real blockers but the nodejs application could have be
 - You can customize what picture you send
 - You can customize your caption!
 - You can view all of your messages and swipe them
+- You can almoooossttt customized your caption style (Font Size and Colors)
 
 ### Server
 
