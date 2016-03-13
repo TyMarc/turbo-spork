@@ -17,7 +17,7 @@
             android:scaleType="centerCrop"
             android:src="@drawable/sample_bg" />
 
-        <TextView
+        <EditText
             android:id="@+id/message_text"
             android:layout_width="match_parent"
             android:layout_height="@dimen/message_text_height"

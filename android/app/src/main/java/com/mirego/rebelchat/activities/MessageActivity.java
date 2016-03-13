@@ -97,7 +97,7 @@ public class MessageActivity extends BaseActivity {
                 String text = messageText.getText().toString();
 
 
-                contactPickerFragment = ContactPickerFragment.newInstance(text, base64Image);
+                contactPickerFragment = ContactPickerFragment.newInstance(currentUserId, text, base64Image);
                 FragmentTransaction ft = getFragmentManager().beginTransaction();
                 ft.add(android.R.id.content, contactPickerFragment).commit();
             }

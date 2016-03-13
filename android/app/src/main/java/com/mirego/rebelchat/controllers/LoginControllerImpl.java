@@ -31,13 +31,19 @@ public class LoginControllerImpl implements LoginController {
 
     @Override
     public void login(Context context, String username, final LoginCallback loginCallback) {
-        HttpUrl url = new HttpUrl.Builder()
+        HttpUrl.Builder builder = new HttpUrl.Builder()
                 .scheme("http")
                 .host(context.getString(R.string.service_host))
                 .port(context.getResources().getInteger(R.integer.service_port))
-                .addPathSegment(USERS_PATH)
-                .addQueryParameter(PARAMETER_USERNAME, username)
-                .build();
+                .addPathSegment(USERS_PATH);
+
+
+        if (username.isEmpty()){
+            loginCallback.onLoginFail();
+            return;
+        }
+
+        HttpUrl url = builder.build();
 
         Request request = new Request.Builder()
                 .url(url)

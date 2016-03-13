@@ -39,13 +39,15 @@ public class ContactPickerFragment extends Fragment implements OnItemClickListen
 	private SparseBooleanArray checkedUsers;
 	private UsersController usersController;
 	private MessageController messageController;
+	private String currentUserId;
 	private String text;
 	private String base64;
 
 
-	public static ContactPickerFragment newInstance(final String text, final String base64image){
+	public static ContactPickerFragment newInstance(final String currentUserId, final String text, final String base64image){
 		ContactPickerFragment fragment = new ContactPickerFragment();
 		Bundle b = new Bundle();
+		b.putString("currentUserId", currentUserId);
 		b.putString("text", text);
 		b.putString("base64", base64image);
 		fragment.setArguments(b);
@@ -58,6 +60,7 @@ public class ContactPickerFragment extends Fragment implements OnItemClickListen
 			@Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 		View v = inflater.inflate(R.layout.contact_picker, container, false);
 
+		currentUserId = getArguments().getString("currentUserId");
 		text = getArguments().getString("text");
 		base64 = getArguments().getString("base64");
 		usersController = new UsersControllerImpl();
@@ -140,7 +143,7 @@ public class ContactPickerFragment extends Fragment implements OnItemClickListen
 		} else if(arg0.getId() == R.id.done) {
 			if(adapter != null) {
 				for(User user : adapter.getCheckedUsers()) {
-					messageController.sendMessage(getActivity(), user.userId, text, base64, new MessageController.SendMessageCallback() {
+					messageController.sendMessage(getActivity(), currentUserId, text, base64, user.userId, false, new MessageController.SendMessageCallback() {
 						@Override
 						public void onSendMessageSuccess() {
 							if(getActivity() != null) {
