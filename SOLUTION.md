@@ -25,10 +25,11 @@ We didn't really have any real blockers but the nodejs application could have be
 > **Platform choice:** _Android_
 
 - You can send messages to anybody registered to Rebel Chat
-- You can customize what picture you send
-- You can customize your caption!
-- You can view all of your messages and swipe them
-- You can almoooossttt customized your caption style (Font Size and Colors)
+- You can also select multiple recipient
+- You can customize your image! (Click on the image icon)
+- You can customize your caption! (Click on the caption text)
+- You can view all of your messages and swipe them (Click on the enveloppe)
+- You can almoooossttt customize your caption style (Font Size and Colors)
 
 ### Server
 
