@@ -27,7 +27,7 @@
         android:layout_below="@id/user"
         android:background="@color/faded_black"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="18sp"
         android:text="Yo"
         android:gravity="center"/>
 

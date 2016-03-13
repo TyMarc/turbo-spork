@@ -2,6 +2,8 @@ package com.mirego.rebelchat;
 
 import android.app.Application;
 
+import com.mirego.rebelchat.controllers.UsersSingleton;
+
 import uk.co.chrisjenx.calligraphy.CalligraphyConfig;
 
 public class RebelChatApplication extends Application {
@@ -11,6 +13,8 @@ public class RebelChatApplication extends Application {
         super.onCreate();
 
         configureCalligraphy();
+
+        UsersSingleton.getInstance().init(this);
     }
 
     private void configureCalligraphy() {
