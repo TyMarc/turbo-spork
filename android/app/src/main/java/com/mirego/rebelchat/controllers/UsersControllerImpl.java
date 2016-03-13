@@ -3,6 +3,7 @@ package com.mirego.rebelchat.controllers;
 import android.content.Context;
 
 import com.mirego.rebelchat.R;
+import com.mirego.rebelchat.models.Message;
 import com.mirego.rebelchat.models.User;
 
 import org.json.JSONArray;
@@ -25,9 +26,14 @@ public class UsersControllerImpl implements UsersController {
 
     private final String USERS_PATH = "users";
 
+    private final String MESSAGES_PATH = "users/%1$s/messages";
     private final String PARAMETER_USER_ID = "_id";
     private final String PARAMETER_USERNAME = "name";
     private final String PARAMETER_EMAIL = "email";
+
+    private final String PARAMETER_M_USER_ID = "userId";
+    private final String PARAMETER_M_TEXT = "text";
+    private final String PARAMETER_M_IMAGE = "image";
 
     private OkHttpClient client = new OkHttpClient();
 
@@ -68,47 +74,53 @@ public class UsersControllerImpl implements UsersController {
     }
 
     @Override
-    public void register(Context context, String username, String email, final RegisterCallback registerCallback) {
+    public void getMessagesFromUser(Context context, final String userId, final MessagesCallback messagesCallback) {
         HttpUrl url = new HttpUrl.Builder()
                 .scheme("http")
                 .host(context.getString(R.string.service_host))
                 .port(context.getResources().getInteger(R.integer.service_port))
-                .addPathSegment(USERS_PATH)
+                .addPathSegment(MESSAGES_PATH.format(userId))
                 .build();
-
-        JSONObject jsonObject = new JSONObject();
-        try {
-            jsonObject.put(PARAMETER_USERNAME, username);
-            jsonObject.put(PARAMETER_EMAIL, email);
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
 
         Request request = new Request.Builder()
                 .url(url)
-                .post(RequestBody.create(MediaType.parse("application/json"), jsonObject.toString()))
                 .build();
 
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
-                if (registerCallback != null) {
-                    String userId = getUserIdFromResponseObject(response);
-                    if (userId != null) {
-                        registerCallback.onRegisterSuccess(userId);
+                if (messagesCallback != null) {
+                    ArrayList<Message> users = getMessagesFromResponseArray(response);
+                    if (users.size() > 0) {
+                        messagesCallback.onMessagesSuccess(users);
                     } else {
-                        registerCallback.onRegisterFail();
+                        messagesCallback.onMessagesFailed();
                     }
                 }
             }
 
             @Override
             public void onFailure(Call call, IOException e) {
-                if(registerCallback != null){
-                    registerCallback.onRegisterFail();
+                if (messagesCallback != null) {
+                    messagesCallback.onMessagesFailed();
                 }
             }
         });
+
+    }
+
+    private ArrayList<Message> getMessagesFromResponseArray(Response response) {
+        try {
+            ArrayList<Message> users = new ArrayList<Message>();
+            JSONArray userList = new JSONArray(response.body().string());
+            for(int i = 0; i < userList.length(); i++) {
+                JSONObject user = (JSONObject) userList.get(i);
+                users.add(new Message(user.getString(PARAMETER_M_USER_ID), user.getString(PARAMETER_M_TEXT), user.getString(PARAMETER_M_IMAGE)));
+            }
+            return users;
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     private ArrayList<User> getUserIdFromResponseArray(Response response) {
@@ -120,15 +132,6 @@ public class UsersControllerImpl implements UsersController {
                 users.add(new User(user.getString(PARAMETER_USERNAME), user.getString(PARAMETER_USER_ID), user.getString(PARAMETER_EMAIL)));
             }
             return users;
-        } catch (Exception e) {
-            return null;
-        }
-    }
-
-    private String getUserIdFromResponseObject(Response response) {
-        try {
-            JSONObject user = new JSONObject(response.body().string());
-            return user.getString(PARAMETER_USER_ID);
         } catch (Exception e) {
             return null;
         }
