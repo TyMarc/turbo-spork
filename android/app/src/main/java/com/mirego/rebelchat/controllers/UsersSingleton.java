@@ -4,6 +4,7 @@ import android.content.Context;
 
 import com.mirego.rebelchat.models.User;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 /**
@@ -31,9 +32,13 @@ public class UsersSingleton implements UsersController.UsersCallback {
         usersController.getUsers(context, null, this);
     }
 
+    public ArrayList<User> getUsers() {
+        return users;
+    }
+
     @Override
     public void onUsersSuccess(ArrayList<User> users) {
-        this.users
+        this.users = users;
     }
 
     @Override
