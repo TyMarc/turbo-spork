@@ -7,4 +7,8 @@
     <color name="messageBackground">#80000000</color>
     <color name="toolbarBackground">#E3E7EA</color>
     <color name="windowBackground">#000000</color>
+    <color name="white">#FFFFFF</color>
+    <color name="transparent">#00FFFFFF</color>
+    <color name="faded_black">#33000000</color>
+    <color name="black">#000000</color>
 </resources>
