@@ -10,4 +10,5 @@ public interface MessageController {
     }
 
     void sendMessage(Context context, String userId, String text, String image, SendMessageCallback sendMessageCallback);
+    void sendMessage(Context context, String userId, String text, String image, String userIdTo, boolean chat, SendMessageCallback sendMessageCallback);
 }

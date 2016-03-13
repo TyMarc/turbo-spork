@@ -57,6 +57,32 @@ router.get('/:id/messages', function(req, res) {
 }); 
 
 /*
+ * GET user messages
+ */
+router.get('/:idFrom/messages/:idTo', function(req, res) {
+  var db = req.db;
+  var _userFrom = req.params.idFrom;
+  var _userTo = req.params.idTo;
+
+  var messagesCollection = db.messages;
+
+  var collection = db.users;
+    collection.findOne({
+    "_id": _userId
+  }, {}, function(err, doc) {
+    if (doc == null) {
+      res.status(404) // HTTP status 404: NotFound
+      res.send('Not found');
+    } else {
+      // SUCCESS
+        db.messages.find({ userId: _userFrom, userIdTo: _userTo, chat: true}, {}, function(e, docs) {
+          res.json(docs);
+        });
+    }
+  });
+}); 
+
+/*
  * Update a user
  */
 router.put('/:id', function(req, res) {
