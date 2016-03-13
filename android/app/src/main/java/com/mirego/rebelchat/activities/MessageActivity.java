@@ -2,6 +2,7 @@ package com.mirego.rebelchat.activities;
 
 import android.app.Activity;
 import android.app.ActivityOptions;
+import android.app.FragmentTransaction;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -23,6 +24,7 @@ import android.widget.TextView;
 import com.mirego.rebelchat.R;
 import com.mirego.rebelchat.controllers.MessageController;
 import com.mirego.rebelchat.controllers.MessageControllerImpl;
+import com.mirego.rebelchat.fragments.ContactPickerFragment;
 import com.mirego.rebelchat.transition.ScaleTransition;
 import com.mirego.rebelchat.utilities.Encoding;
 import com.mirego.rebelchat.utilities.RandomString;
@@ -39,6 +41,7 @@ public class MessageActivity extends BaseActivity {
     private String currentUserId;
     private Handler messageHandler;
     private Runnable messageCallback;
+    private ContactPickerFragment contactPickerFragment;
 
     @Bind(R.id.root)
     View root;
@@ -93,27 +96,10 @@ public class MessageActivity extends BaseActivity {
 
                 String text = messageText.getText().toString();
 
-                messageController.sendMessage(getApplicationContext(), currentUserId, text, base64Image, new MessageController.SendMessageCallback() {
-                    @Override
-                    public void onSendMessageSuccess() {
-                        dismissLoadingIndicator(new Runnable() {
-                            @Override
-                            public void run() {
-                                Snackbar.make(root, R.string.message_send_success, Snackbar.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
 
-                    @Override
-                    public void onSendMessageFail() {
-                        dismissLoadingIndicator(new Runnable() {
-                            @Override
-                            public void run() {
-                                Snackbar.make(root, R.string.message_send_error, Snackbar.LENGTH_SHORT).show();
-                            }
-                        });
-                    }
-                });
+                contactPickerFragment = ContactPickerFragment.newInstance(text, base64Image);
+                FragmentTransaction ft = getFragmentManager().beginTransaction();
+                ft.add(android.R.id.content, contactPickerFragment).commit();
             }
         };
     }
@@ -168,9 +154,13 @@ public class MessageActivity extends BaseActivity {
         messageText.setText(randomString);
     }
 
-    private void takeAndSendScreenshot() {
-        showLoadingIndicator(getString(R.string.message_send_progress));
+    public void closePicker(){
+        if(contactPickerFragment != null){
+            contactPickerFragment.slideOut();
+        }
+    }
 
+    private void takeAndSendScreenshot() {
         messageHandler.post(messageCallback);
     }
 
