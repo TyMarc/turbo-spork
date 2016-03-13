@@ -18,12 +18,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.mirego.rebelchat.R;
 import com.mirego.rebelchat.adapters.ContactPickerAdapter;
-import com.mirego.rebelchat.adapters.RoommateAdapter;
 import com.mirego.rebelchat.controllers.MessageController;
 import com.mirego.rebelchat.controllers.MessageControllerImpl;
 import com.mirego.rebelchat.controllers.UsersController;
@@ -142,20 +139,15 @@ public class ContactPickerFragment extends Fragment implements OnItemClickListen
 			slideOut();
 		} else if(arg0.getId() == R.id.done) {
 			if(adapter != null) {
+				Snackbar.make(getView(), R.string.message_send_progress, Snackbar.LENGTH_SHORT).show();
 				for(User user : adapter.getCheckedUsers()) {
 					messageController.sendMessage(getActivity(), currentUserId, text, base64, user.userId, false, new MessageController.SendMessageCallback() {
 						@Override
 						public void onSendMessageSuccess() {
-							if(getActivity() != null) {
-								//Toast.makeText(getActivity(), R.string.message_send_success, Toast.LENGTH_SHORT).show();
-							}
 						}
 
 						@Override
 						public void onSendMessageFail() {
-							if(getActivity() != null) {
-								Toast.makeText(getActivity(), R.string.message_send_error, Toast.LENGTH_SHORT).show();
-							}
 						}
 					});
 				}

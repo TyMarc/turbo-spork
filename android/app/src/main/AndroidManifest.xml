@@ -3,6 +3,7 @@
     package="com.mirego.rebelchat">
 
     <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
 
     <application
         android:name=".RebelChatApplication"
@@ -12,16 +13,26 @@
         android:supportsRtl="true"
         android:theme="@style/RebelChat">
 
-        <activity android:name=".activities.HomeActivity" android:theme="@style/RebelChat">
+
+        <activity
+            android:name=".activities.HomeActivity"
+            android:theme="@style/RebelChat">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-        <activity android:name=".activities.LoginActivity" android:theme="@style/RebelChat" />
-        <activity android:name=".activities.MessageActivity" android:theme="@style/RebelChat.Message" />
-
+        <activity
+            android:name=".activities.LoginActivity"
+            android:theme="@style/RebelChat" />
+        <activity
+            android:name=".activities.MessageActivity"
+            android:theme="@style/RebelChat.Message" />
+        <activity
+            android:name=".activities.SeeMessagesActivity"
+            android:label="@string/title_activity_see_messages"
+            android:theme="@style/RebelChat"></activity>
     </application>
 
 </manifest>

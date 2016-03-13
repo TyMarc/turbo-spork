@@ -39,7 +39,7 @@ import android.util.TypedValue;
 
 public class Utils {
 
-	public static final int MAX_IMAGE_DIMEN = 1600;
+	public static final int MAX_IMAGE_DIMEN = 800;
 	private static final String TAG = "Utils";
 
 
@@ -156,10 +156,23 @@ public class Utils {
 		image.compress(CompressFormat.JPEG, 70, bos);
 		image.recycle();
 
-		Log.i(TAG, "Scaled down image size= " + bos.size()/1024 + "kb");
+		Log.i(TAG, "Scaled down image size= " + bos.size() / 1024 + "kb");
 
 		return bos.toByteArray();
 	}
+
+	public static Bitmap prepareImageFT(final Context context, Bitmap image){
+		if(Math.max(image.getWidth(), image.getHeight()) > MAX_IMAGE_DIMEN){
+			image = scaleDown(image, MAX_IMAGE_DIMEN, true);
+		}
+
+		image = rotateImageIfRequired(context, image, null);
+
+		image = putWhiteBackground(image);
+
+		return image;
+	}
+
 
 	private static Bitmap putWhiteBackground(final Bitmap image) {
 		Bitmap newBitmap = Bitmap.createBitmap(image.getWidth(), image.getHeight(), image.getConfig());

@@ -26,7 +26,6 @@ public class UsersControllerImpl implements UsersController {
 
     private final String USERS_PATH = "users";
 
-    private final String MESSAGES_PATH = "users/%1$s/messages";
     private final String PARAMETER_USER_ID = "_id";
     private final String PARAMETER_USERNAME = "name";
     private final String PARAMETER_EMAIL = "email";
@@ -79,7 +78,7 @@ public class UsersControllerImpl implements UsersController {
                 .scheme("http")
                 .host(context.getString(R.string.service_host))
                 .port(context.getResources().getInteger(R.integer.service_port))
-                .addPathSegment(MESSAGES_PATH.format(userId))
+                .addPathSegments("users/" + userId + "/messages")
                 .build();
 
         Request request = new Request.Builder()
@@ -90,9 +89,9 @@ public class UsersControllerImpl implements UsersController {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (messagesCallback != null) {
-                    ArrayList<Message> users = getMessagesFromResponseArray(response);
-                    if (users.size() > 0) {
-                        messagesCallback.onMessagesSuccess(users);
+                    ArrayList<Message> messages = getMessagesFromResponseArray(response);
+                    if (messages.size() > 0) {
+                        messagesCallback.onMessagesSuccess(messages);
                     } else {
                         messagesCallback.onMessagesFailed();
                     }
@@ -110,16 +109,17 @@ public class UsersControllerImpl implements UsersController {
     }
 
     private ArrayList<Message> getMessagesFromResponseArray(Response response) {
+        ArrayList<Message> messages = new ArrayList<Message>();
         try {
-            ArrayList<Message> users = new ArrayList<Message>();
             JSONArray userList = new JSONArray(response.body().string());
             for(int i = 0; i < userList.length(); i++) {
-                JSONObject user = (JSONObject) userList.get(i);
-                users.add(new Message(user.getString(PARAMETER_M_USER_ID), user.getString(PARAMETER_M_TEXT), user.getString(PARAMETER_M_IMAGE)));
+                JSONObject message = (JSONObject) userList.get(i);
+                messages.add(new Message(message.getString(PARAMETER_M_USER_ID), message.getString(PARAMETER_M_TEXT), message.getString(PARAMETER_M_IMAGE)));
             }
-            return users;
+            return messages;
         } catch (Exception e) {
-            return null;
+            e.printStackTrace();
+            return messages;
         }
     }
 

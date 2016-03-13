@@ -26,7 +26,7 @@
             android:gravity="center"
             android:textColor="@android:color/white"
             android:textSize="@dimen/message_font_size"
-            tools:text="LY8uU81OVgJqKZo97" />
+            tools:text="Hey there" />
 
     </FrameLayout>
 
@@ -44,6 +44,19 @@
         android:src="@drawable/icn_logout" />
 
     <com.mirego.rebelchat.views.ToolButton
+        android:id="@+id/btn_photo"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_gravity="top|center"
+        android:padding="8dp"
+        android:focusable="true"
+        android:layout_marginTop="@dimen/message_button_top_margin"
+        android:layout_marginEnd="@dimen/message_button_side_margin"
+        android:background="?selectableItemBackgroundBorderless"
+        android:scaleType="fitCenter"
+        android:src="@drawable/icn_photos" />
+
+    <com.mirego.rebelchat.views.ToolButton
         android:id="@+id/btn_shuffle"
         android:layout_width="40dp"
         android:layout_height="40dp"
@@ -54,7 +67,8 @@
         android:layout_marginEnd="@dimen/message_button_side_margin"
         android:background="?selectableItemBackgroundBorderless"
         android:scaleType="fitCenter"
-        android:src="@drawable/icn_shuffle" />
+        android:tint="@color/white"
+        android:src="@drawable/message" />
 
     <com.mirego.rebelchat.views.SnapButton
         android:id="@+id/btn_snap"

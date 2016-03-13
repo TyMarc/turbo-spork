@@ -10,9 +10,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.mirego.rebelchat.R;
+import com.mirego.rebelchat.models.Message;
 import com.mirego.rebelchat.models.User;
-import com.mirego.rebelchat.utilities.CircleTransform;
-import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 
@@ -20,22 +19,22 @@ import java.util.ArrayList;
  * Created by marc-antoinehinse on 2015-10-10.
  */
 
-public class RoommateAdapter extends ArrayAdapter<User> {
+public class MessageAdapter extends ArrayAdapter<Message> {
     private Context mContext;
     private LayoutInflater mInflater = null;
 
-    private ArrayList<User> roommates;
+    private ArrayList<Message> roommates;
 
-    public RoommateAdapter(Context context, ArrayList<User> roommates) {
-        super(context, R.layout.roommate_item, roommates);
+    public MessageAdapter(Context context, ArrayList<Message> roommates) {
+        super(context, R.layout.message_item, roommates);
         mContext = context;
         this.roommates = roommates;
     }
 
     static class ViewHolder {
-        public TextView name;
-        public ImageView avatar;
-        public CheckBox checkBox;
+        public TextView user;
+        public ImageView image;
+        public TextView message;
     }
 
     private LayoutInflater getInflater(){
@@ -50,12 +49,12 @@ public class RoommateAdapter extends ArrayAdapter<User> {
         View rowView;
 
         if(convertView == null){ // Only inflating if necessary is great for performance
-            rowView = getInflater().inflate(R.layout.roommate_item, parent, false);
+            rowView = getInflater().inflate(R.layout.message_item, parent, false);
 
             ViewHolder holder = new ViewHolder();
-            holder.name = (TextView) rowView.findViewById(R.id.name);
-            holder.avatar = (ImageView) rowView.findViewById(R.id.avatar);
-            holder.checkBox = (CheckBox) rowView.findViewById(R.id.checkBox);
+            holder.user = (TextView) rowView.findViewById(R.id.user);
+            holder.image = (ImageView) rowView.findViewById(R.id.image);
+            holder.message = (TextView) rowView.findViewById(R.id.message);
             rowView.setTag(holder);
         } else{
             rowView = convertView;
@@ -63,17 +62,16 @@ public class RoommateAdapter extends ArrayAdapter<User> {
 
         ViewHolder holder = (ViewHolder) rowView.getTag();
 
-        User r = getItem(position);
+        Message r = getItem(position);
 
-        holder.name.setText(r.username);
+        holder.user.setText(r.userId);
+        holder.message.setText(r.text);
 
 
-        if(r.avatar != null) {
+        if(r.image != null) {
             //Picasso.with(getContext()).load(r.avatar).transform(new CircleTransform()).into(holder.avatar);
-            holder.avatar.setImageBitmap(r.avatar);
+            holder.image.setImageBitmap(r.image);
         }
-
-        holder.checkBox.setChecked(r.isChecked);
 
         return rowView;
     }

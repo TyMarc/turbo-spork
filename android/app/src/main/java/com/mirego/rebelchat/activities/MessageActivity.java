@@ -4,11 +4,16 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.app.FragmentTransaction;
 import android.content.Intent;
+import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.ParcelFileDescriptor;
+import android.provider.MediaStore;
 import android.support.design.widget.Snackbar;
 import android.transition.AutoTransition;
 import android.transition.Slide;
@@ -28,6 +33,10 @@ import com.mirego.rebelchat.fragments.ContactPickerFragment;
 import com.mirego.rebelchat.transition.ScaleTransition;
 import com.mirego.rebelchat.utilities.Encoding;
 import com.mirego.rebelchat.utilities.RandomString;
+import com.mirego.rebelchat.utilities.Utils;
+
+import java.io.FileDescriptor;
+import java.io.IOException;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -36,6 +45,7 @@ import butterknife.OnClick;
 public class MessageActivity extends BaseActivity {
 
     private static String EXTRA_USER_ID = "extra_user_id";
+    private static int RESULT_LOAD_IMAGE = 9001;
 
     private MessageController messageController;
     private String currentUserId;
@@ -62,6 +72,50 @@ public class MessageActivity extends BaseActivity {
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RESULT_LOAD_IMAGE && resultCode == RESULT_OK && null != data) {
+            Uri selectedImage = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+
+            Cursor cursor = getContentResolver().query(selectedImage,
+                    filePathColumn, null, null, null);
+            cursor.moveToFirst();
+
+            int columnIndex = cursor.getColumnIndex(filePathColumn[0]);
+            String picturePath = cursor.getString(columnIndex);
+            cursor.close();
+
+            ImageView imageView = (ImageView) findViewById(R.id.message_image);
+
+            Bitmap bmp = null;
+            try {
+                bmp = getBitmapFromUri(selectedImage);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            imageView.setImageBitmap(Utils.prepareImageFT(screenView.getContext(), bmp));
+
+        }
+
+
+    }
+
+
+
+    private Bitmap getBitmapFromUri(Uri uri) throws IOException {
+        ParcelFileDescriptor parcelFileDescriptor =
+                getContentResolver().openFileDescriptor(uri, "r");
+        FileDescriptor fileDescriptor = parcelFileDescriptor.getFileDescriptor();
+        Bitmap image = BitmapFactory.decodeFileDescriptor(fileDescriptor);
+        parcelFileDescriptor.close();
+        return image;
+    }
+
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_message);
@@ -71,8 +125,6 @@ public class MessageActivity extends BaseActivity {
 
         messageController = new MessageControllerImpl();
         currentUserId = getIntent().getStringExtra(EXTRA_USER_ID);
-
-        setRandomString();
 
         getWindow().setAllowEnterTransitionOverlap(false);
         getWindow().setAllowReturnTransitionOverlap(true);
@@ -89,6 +141,7 @@ public class MessageActivity extends BaseActivity {
                 android.os.Process.setThreadPriority(android.os.Process.THREAD_PRIORITY_DEFAULT);
 
                 Bitmap screenshot = Bitmap.createBitmap(screenView.getWidth(), screenView.getHeight(), Bitmap.Config.ARGB_8888);
+
                 Canvas c = new Canvas(screenshot);
                 screenView.layout(0, 0, screenView.getWidth(), screenView.getHeight());
                 screenView.draw(c);
@@ -119,6 +172,7 @@ public class MessageActivity extends BaseActivity {
         scaleTransition.addTarget(R.id.btn_logout);
         scaleTransition.addTarget(R.id.btn_shuffle);
         scaleTransition.addTarget(R.id.btn_snap);
+        scaleTransition.addTarget(R.id.btn_photo);
 
         transitionSet.addTransition(autoTransition);
         transitionSet.addTransition(slideUp);
@@ -141,7 +195,15 @@ public class MessageActivity extends BaseActivity {
 
     @OnClick(R.id.btn_shuffle)
     void onShufflePressed() {
-        setRandomString();
+        SeeMessagesActivity.show(this, currentUserId);
+        //setRandomString();
+    }
+
+    @OnClick(R.id.btn_photo)
+    void onPhotoPressed() {
+        Intent i = new Intent(Intent.ACTION_PICK,android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+        startActivityForResult(i, RESULT_LOAD_IMAGE);
+        //setRandomString();
     }
 
     @OnClick(R.id.btn_snap)
